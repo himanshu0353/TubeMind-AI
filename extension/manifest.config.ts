@@ -14,14 +14,14 @@ export default defineManifest({
   },
 
   background :{
-    service_worker: "src/background/index.ts",
+    service_worker: "src/background/background.ts",
     type: "module"
   },
 
   content_scripts : [
     {
       matches: ['https://www.youtube.com/*'],
-      js: ['src/content/index.ts']
+      js: ['src/content/content.ts']
     }
   ],
 });
