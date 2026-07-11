@@ -1,28 +1,12 @@
-import { MessageTypes } from "../shared/messages";
+import { MessageTypes, type CurrentVideoResponse } from "../shared/messages";
+import {handleGetActiveVideo} from "./handlers/handleGetActiveVideo"
 
-console.log("🚀 Background started");
+console.log('background is running');
 
-chrome.tabs.onActivated.addListener(async ({ tabId }) => {
-  console.log("Activated Tab:", tabId);
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if(message.type === MessageTypes.GET_ACTIVE_VIDEO){
+    handleGetActiveVideo(sendResponse);
 
-  const tab = await chrome.tabs.get(tabId);
-
-  console.log("Tab URL:", tab.url);
-
-  if (!tab.url?.startsWith("https://www.youtube.com/")) {
-    console.log("Not a YouTube tab");
-    return;
+    return true;
   }
-
-  try {
-    console.log("Sending message...");
-
-    const response = await chrome.tabs.sendMessage(tabId, {
-      type: MessageTypes.GET_CURRENT_VIDEO,
-    });
-
-    console.log("Response:", response);
-  } catch (error) {
-    console.error("SendMessage Error:", error);
-  }
-});
+})
