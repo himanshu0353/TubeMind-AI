@@ -1,4 +1,4 @@
-import { MessageTypes, type CurrentVideoResponse } from "../shared/messages";
+import { MessageTypes } from "../shared/messages";
 import {handleGetActiveVideo} from "./handlers/handleGetActiveVideo"
 
 console.log('background is running');

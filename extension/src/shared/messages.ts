@@ -11,4 +11,5 @@ export interface GetCurrentVideoRequest{
 export interface CurrentVideoResponse{
     videoId : string | null;
     url :string;
+    title: string;
 }

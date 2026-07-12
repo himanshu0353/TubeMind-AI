@@ -8,12 +8,14 @@ export async function handleGetActiveVideo(
         currentWindow:true
     });
 
+    console.log("Active tab:", tab);
     if(!tab?.id){
         sendResponse(null);
 
         return;
     }
 
+    console.log("Sending message to tab:", tab.id);
     try{
         const response = await chrome.tabs.sendMessage(
             tab.id,

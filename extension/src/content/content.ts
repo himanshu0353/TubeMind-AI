@@ -4,10 +4,12 @@ import { MessageTypes,
 
 function registerMessageListener() {
     chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+        console.log('message received:', message);
         if(message.type === MessageTypes.GET_CURRENT_VIDEO ){
             const response: CurrentVideoResponse = {
                 videoId: getCurrentVideoID(),
                 url: window.location.href,
+                title:document.title,
             }
             sendResponse(response)
         }
