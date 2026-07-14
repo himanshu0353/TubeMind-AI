@@ -10,6 +10,10 @@ function registerMessageListener() {
                 videoId: getCurrentVideoID(),
                 url: window.location.href,
                 title:document.title,
+
+                channelName : getChannelName(),
+                thumbnail : getThumbnail(),
+                isShort : getIsShort(),
             }
             sendResponse(response)
         }
@@ -22,6 +26,27 @@ function getCurrentVideoID() : string | null {
     const url = new URL(window.location.href)
 
     return url.searchParams.get("v")
+}
+
+function getChannelName(): string | null{
+    const channel = document.querySelector(
+        "#owner #channel-name a"
+    );
+    return channel?.textContent?.trim()?? null;
+}
+
+function getThumbnail(): string | null {
+    const videoId = getCurrentVideoID();
+
+    if(!videoId){
+        return null;
+    }
+
+    return `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+}
+
+function getIsShort(): boolean{
+    return window.location.pathname.startsWith("/shorts/");
 }
 
 function logCurrentVideo() {
