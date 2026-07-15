@@ -1,6 +1,7 @@
 
 import { MessageTypes } from "../../shared/messages";
 import { handleGetActiveVideo } from "../handlers/handleGetActiveVideo";
+// import { handleGetTranscript } from "../handlers/handleGetTranscript";
 
 export function handleRuntimeMessage( 
     message:any,
@@ -12,5 +13,20 @@ export function handleRuntimeMessage(
 
         return true;
     }
+    // if(message.type === MessageTypes.GET_TRANSCRIPT){
+        
+            // handleGetTranscript()
+            // .then((response) => {
+            //     sendResponse(response);
+            // })
+            // .catch((error)=> {
+            //     console.error('failed to load transcript:', error);
+
+            //     sendResponse({
+            //         transcript: "",
+            //     });
+            // });
+            // return true;
+        // }
 
 }

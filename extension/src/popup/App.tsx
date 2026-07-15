@@ -1,8 +1,10 @@
 import  useCurrentVideo from "./hooks/useCurrentVideo";
+// import { useTranscript } from "./hooks/useTranscript";
 
 function App() {
     
-    const video = useCurrentVideo()
+    const video = useCurrentVideo() ;
+    // const transcript = useTranscript();
     return (
         <div>
             TubeMind AI!
