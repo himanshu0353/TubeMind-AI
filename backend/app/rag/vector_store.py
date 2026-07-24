@@ -49,9 +49,10 @@ class VectorStore:
         )
 
     def get_retriever(self, search_kwargs: dict | None =None,):
+        search_type='mmr'
         if search_kwargs is None:
             search_kwargs ={
-                "k":4,
+                "k":20,
             }
 
         return self.vector_store.as_retriever(

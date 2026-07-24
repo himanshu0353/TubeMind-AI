@@ -10,7 +10,7 @@ export function handleRuntimeMessage(
 ){
     if(message.type === MessageTypes.GET_ACTIVE_VIDEO){
         handleGetActiveVideo(sendResponse);
-
+        
         return true;
     }
     // if(message.type === MessageTypes.GET_TRANSCRIPT){

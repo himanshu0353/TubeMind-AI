@@ -1,9 +1,10 @@
 from langchain_huggingface import HuggingFaceEmbeddings
+from app.core.config import settings
 
 class EmbeddingService:
     def __init__(self):
         self.embeddings = HuggingFaceEmbeddings(
-            model_name = "sentence-transformers/all-MiniLM-L6-v2",
+            model_name = settings.EMBEDDING_MODEL,
             model_kwargs = {
                 "device": "cpu",
             },

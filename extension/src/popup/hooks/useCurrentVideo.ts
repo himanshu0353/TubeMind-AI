@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { MessageTypes} from "../../shared/messages";
 
 function useCurrentVideo(){
-    const [video, setVideo] = useState(null);
+    const [video, setVideo] = useState({
+        videoId:"",
+    });
 
     useEffect(() => {
         async function loadVideo() {
