@@ -10,8 +10,9 @@ export function useChat(){
 
     const [error, setError] = useState("")
 
-    const ask = async (videoId: string) => {
-        if(!question.trim()) return;
+    const ask = async (videoId: string, requestedQuestion = question): Promise<string | null> => {
+        const trimmedQuestion = requestedQuestion.trim();
+        if(!trimmedQuestion || !videoId) return null;
 
         setLoading(true);
 
@@ -20,16 +21,18 @@ export function useChat(){
         try{
             const response = await askQuestion({
                 video_id: videoId,
-                question,
+                question: trimmedQuestion,
             });
 
             setAnswer(response.answer);
+            return response.answer;
         }catch(err){
             setError(
                 err instanceof Error 
                 ? err.message
                 : "Somethinf went wrong"
             );
+            return null;
         }finally{
             setLoading(false)
         }

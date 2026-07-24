@@ -1,85 +1,63 @@
 
-import './App.css'
-import useCurrentVideo from './popup/hooks/useCurrentVideo';
-import  {useChat}  from './popup/hooks/useChat';
+import { useState } from "react";
+import "./App.css";
+import ChatInput from "./popup/components/ChatInput";
+import ChatWindow from "./popup/components/ChatWindow";
+import ErrorBanner from "./popup/components/ErrorBanner";
+import Footer from "./popup/components/Footer";
+import Header from "./popup/components/Header";
+import SuggestedQuestions from "./popup/components/SuggestedQuestions";
+import VideoCard from "./popup/components/VideoCard";
+import { useChat } from "./popup/hooks/useChat";
+import useCurrentVideo from "./popup/hooks/useCurrentVideo";
+import type { ChatMessage, CurrentVideo } from "./popup/types/chat";
 
 
 function App() {
-  const video = useCurrentVideo()
-  const {question, setQuestion, answer, loading, error, ask} = useChat();
+  const rawVideo = useCurrentVideo();
+  const video = rawVideo as CurrentVideo | null;
+  const { question, setQuestion, loading, error, ask } = useChat();
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [lastQuestion, setLastQuestion] = useState("");
+
+  async function submitQuestion(questionToSend = question) {
+    const trimmedQuestion = questionToSend.trim();
+    if (!trimmedQuestion || !video?.videoId || loading) return;
+
+    setMessages((currentMessages) => [...currentMessages, {
+      id: `${Date.now()}-user`,
+      role: "user",
+      content: trimmedQuestion,
+      timestamp: new Date(),
+    }]);
+    setLastQuestion(trimmedQuestion);
+    setQuestion("");
+
+    const answer = await ask(video.videoId, trimmedQuestion);
+    if (answer) {
+      setMessages((currentMessages) => [...currentMessages, {
+        id: `${Date.now()}-assistant`,
+        role: "assistant",
+        content: answer,
+        timestamp: new Date(),
+      }]);
+    }
+  }
+
+  function retryLastQuestion() {
+    if (lastQuestion) void submitQuestion(lastQuestion);
+  }
 
   return (
-     <div className="w-[400px] h-[500px] bg-zinc-950 text-white flex flex-col">
-
-      <header className="border-b border-zinc-800 p-4">
-        <h1 className="text-xl font-bold">
-          TubeMind AI
-        </h1>
-      </header>
-
-      <div className="flex-1 p-4 space-y-4">
-
-        {/* Current Video */}
-
-        <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-3">
-
-          <h2 className="text-sm font-semibold text-zinc-300">
-            Current Video
-          </h2>
-
-          <p className="mt-2 break-all text-xs text-blue-400">
-            {video.videoId || "No YouTube video detected"}
-          </p>
-
-        </div>
-
-        {/* Question */}
-
-        <textarea
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          placeholder="Ask anything about this video..."
-          rows={5}
-          className="w-full resize-none rounded-lg border border-zinc-700 bg-zinc-900 p-3 text-sm outline-none focus:border-blue-500"
-        />
-
-        {/* Button */}
-
-        <button
-          onClick={() => ask(video.videoId)}
-          disabled={loading || !video.videoId}
-          className="w-full rounded-lg bg-blue-600 py-2 font-medium transition hover:bg-blue-700 disabled:bg-zinc-700"
-        >
-          {loading ? "Thinking..." : "Ask AI"}
-        </button>
-
-        {/* Error */}
-
-        {error && (
-          <div className="rounded-lg bg-red-900/40 border border-red-700 p-3 text-sm text-red-300">
-            {error}
-          </div>
-        )}
-
-        {/* Answer */}
-
-        {answer && (
-          <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-3">
-
-            <h2 className="mb-2 text-sm font-semibold text-zinc-300">
-              Answer
-            </h2>
-
-            <p className="whitespace-pre-wrap text-sm leading-6">
-              {answer}
-            </p>
-
-          </div>
-        )}
-
-      </div>
-
-    </div>
+    <main className="flex h-[600px] w-[400px] flex-col overflow-hidden bg-zinc-950 text-white">
+      <Header isConnected={Boolean(video?.videoId)} />
+      <VideoCard video={video} />
+      <SuggestedQuestions disabled={loading || !video?.videoId} onSelect={(suggestion) => void submitQuestion(suggestion)} />
+      <ChatWindow messages={messages} loading={loading} />
+      {error && <ErrorBanner message={error} onRetry={retryLastQuestion} />}
+      <ChatInput value={question} disabled={loading || !video?.videoId} canSend={Boolean(question.trim())} onChange={setQuestion} onSubmit={() => void submitQuestion()} />
+      <Footer />
+    </main>
   );
 }
 
