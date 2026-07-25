@@ -18,6 +18,12 @@ export default defineManifest({
     type: "module"
   },
 
+  host_permissions: [
+    "https://*.onrender.com/*",
+    "http://localhost:8000/*",
+    "http://127.0.0.1:8000/*",
+  ],
+
   content_scripts : [
     {
       matches: ['https://www.youtube.com/*'],

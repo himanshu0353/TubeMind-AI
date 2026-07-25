@@ -11,8 +11,8 @@ function Header({ isConnected }: HeaderProps) {
             &#129504;
           </div>
           <div className="min-w-0">
-            <h1 className="truncate text-sm font-semibold tracking-tight text-white">TubeMind AI</h1>
-            <p className="truncate text-[10px] text-zinc-500">Understand any YouTube video instantly</p>
+            <h1 className="truncate text-sm font-semibold tracking-tight text-white">TubeMind</h1>
+            <p className="truncate text-[10px] text-zinc-500">Your daily YouTube Partner</p>
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-1.5 text-[10px] font-medium text-zinc-400" aria-label={`Backend status: ${isConnected ? "Connected" : "Offline"}`}>
