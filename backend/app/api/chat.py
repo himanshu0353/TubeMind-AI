@@ -29,7 +29,8 @@ def chat(request: ChatRequest):
 
         
         retriever = rag_pipeline.get_retriever(
-            request.video_id
+            request.video_id,
+            request.transcript,
         )
         docs = retriever.invoke(request.question)
 

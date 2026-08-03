@@ -26,14 +26,14 @@ class RAGPipeline:
     def get_retriever(
             self, 
             video_id: str,
+            transcript: list[TranscriptSegment] = None,
     ):
         
         if self.vector_store.exists(video_id):
             self.vector_store.load(video_id)
         else:
-            transcript = self.transcript_service.get_transcript(
-                video_id,
-            )
+            if not transcript:
+                raise ValueError("Transcript is required for initial video indexing.")
 
             documents = self.document_builder.build(
                 transcript,

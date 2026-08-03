@@ -7,6 +7,13 @@ import manifest from "./manifest.config.ts";
 
 
 export default defineConfig({
+  server: {
+    port: 5173,
+    strictPort: true,
+    hmr: {
+      port: 5173,
+    },
+  },
   plugins: [
     react(),
     tailwindcss(),

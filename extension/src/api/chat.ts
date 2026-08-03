@@ -1,8 +1,10 @@
 import { apiFetch } from "./client";
+import type { TranscriptSegment } from "../shared/messages";
 
 export interface ChatRequest {
     video_id : string;
     question : string;
+    transcript?: TranscriptSegment[];
 }
 
 export interface ChatResponse {
@@ -16,4 +18,4 @@ export async function askQuestion(
         method : "POST",
         body: JSON.stringify(request),
     });
-}
+}

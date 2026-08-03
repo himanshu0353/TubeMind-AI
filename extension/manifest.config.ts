@@ -18,7 +18,13 @@ export default defineManifest({
     type: "module"
   },
 
+  permissions: [
+    "activeTab",
+    "scripting",
+  ],
+
   host_permissions: [
+    "https://*.youtube.com/*",
     "https://*.onrender.com/*",
     "http://localhost:8000/*",
     "http://127.0.0.1:8000/*",
@@ -30,4 +36,4 @@ export default defineManifest({
       js: ['src/content/content.ts']
     }
   ],
-});
+});
