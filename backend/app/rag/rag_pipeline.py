@@ -19,7 +19,7 @@ class RAGPipeline:
         self.embedding_service = EmbeddingService()
 
         self.vector_store = VectorStore(
-            self.embedding_service.get_embedding(),
+            self.embedding_service,
         )
         
 
