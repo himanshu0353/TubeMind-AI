@@ -7,7 +7,7 @@ function decodeHTMLEntities(text: string): string {
 }
 
 function extractCaptionTracksFromHtml(html: string): any[] | null {
-  const index = html.indexOf('"captionTracks":');
+  const index = html.indexOf('captionTracks');
   if (index === -1) return null;
 
   const startIndex = html.indexOf('[', index);
@@ -28,16 +28,22 @@ function extractCaptionTracksFromHtml(html: string): any[] | null {
   }
 
   if (endIndex !== -1) {
-    const jsonStr = html.substring(startIndex, endIndex);
+    let jsonStr = html.substring(startIndex, endIndex);
     try {
       return JSON.parse(jsonStr);
-    } catch (e) {
-      console.error("Failed to parse extracted captionTracks JSON:", e);
+    } catch {
+      try {
+        jsonStr = jsonStr.replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+        return JSON.parse(jsonStr);
+      } catch (e) {
+        console.error("Failed to parse extracted captionTracks JSON:", e);
+      }
     }
   }
 
   return null;
 }
+
 
 export async function fetchYouTubeTranscript(videoId: string): Promise<TranscriptSegment[]> {
   let captionTracks: any[] | null = null;

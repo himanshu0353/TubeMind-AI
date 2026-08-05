@@ -47,6 +47,10 @@ export function useChat(){
                 }
             }
 
+            if (transcript.length === 0) {
+                throw new Error("Could not retrieve transcript for this video. Please verify captions/subtitles are enabled on YouTube for this video.");
+            }
+
             const response = await askQuestion({
                 video_id: videoId,
                 question: trimmedQuestion,
